@@ -56,8 +56,12 @@
         <div class="card">
           <h2>Claim a paper as a pair</h2>
           <div class="field">
-            <label for="name">Pair names</label>
-            <input id="name" placeholder="Both full names" />
+            <label for="name1">Full name 1</label>
+            <input id="name1" placeholder="Full name 1" />
+          </div>
+          <div class="field">
+            <label for="name2">Full name 2</label>
+            <input id="name2" placeholder="Full name 2" />
           </div>
           <div class="field">
             <label for="code">Add code</label>
@@ -71,8 +75,8 @@
     </div>
 
     <script>
-      const SUPABASE_URL = "https://zdizzifeuqzrqxjxasen.supabase.co";
-      const SUPABASE_ANON_KEY = "sb_publishable_xhDks_hxq2ouhD2-8WhkIg_SYZfAmSp";
+      const SUPABASE_URL = "https://oqprlrojqzuzydmkjvcw.supabase.co";
+      const SUPABASE_ANON_KEY = "sb_publishable_1UigVBn3PrnchPuutekQqA_F74avyWU";
 
       const PAPERS = [
         { id: "cuts-2026-07-15-1", date: "July 15, 2026", number: 1, title: "Randomized Approximation Schemes for Cuts and Flows in Capacitated Graphs", citation: "A. A. Benczúr, D. R. Karger. STOC 1996 / SIAM J. Comput. 2015.", link: "https://arxiv.org/abs/cs/0207078", summary: "Introduces cut sparsifiers: near-linear-time construction of a sparse subgraph that approximately preserves every cut. This is the basic sparsification tool behind many later graph-cut algorithms." },
@@ -166,16 +170,19 @@
 
             const button = row.querySelector("button");
             button.addEventListener("click", async () => {
-              const name = document.getElementById("name").value.trim();
+              const name1 = document.getElementById("name1").value.trim();
+              const name2 = document.getElementById("name2").value.trim();
               const code = document.getElementById("code").value.trim();
-              if (!name) { setStatus("Enter both names first."); return; }
+              if (!name1 || !name2) { setStatus("Enter both full names first."); return; }
               if (!code) { setStatus("Enter the code first."); return; }
+              const name = `${name1}; ${name2}`;
               try {
                 submittingId = paper.id;
                 setStatus("");
                 render();
                 await insertClaim(paper.id, name, code);
-                document.getElementById("name").value = "";
+                document.getElementById("name1").value = "";
+                document.getElementById("name2").value = "";
                 document.getElementById("code").value = "";
                 setStatus("Paper claimed.");
                 await load();
